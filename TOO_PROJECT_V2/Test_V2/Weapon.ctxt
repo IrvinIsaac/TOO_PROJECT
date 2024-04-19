@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Weapon
+comment1.params=ammo\ weaponType\ type
+comment1.target=Weapon(int,\ int,\ Bullet)
+comment2.params=p
+comment2.target=void\ shootBullet(Player1)
+comment3.params=
+comment3.target=void\ decreaseAmmo()
+comment4.params=
+comment4.target=void\ increaseAmmo()
+numComments=5
