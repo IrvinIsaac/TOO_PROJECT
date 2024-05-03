@@ -29,7 +29,8 @@ public class Bullet extends Actor
     //State of the Bullet if the durability is 0 remove the object from the world
     public void state()
     {
-        if (this.durability == 0||isAtEdge()){
+        Actor o = getOneIntersectingObject(Obstacle.class);
+        if (this.durability == 0||isAtEdge()||o!=null){
             getWorld().removeObject(this);
             p.resetShootFlag();
         }
@@ -44,11 +45,14 @@ public class Bullet extends Actor
         }
     }
     
-    public void collisionEnvioremnt(Actor skeet)
+    public void collisionEnvioremnt()
     {
         //If every Actor object establish a collision durability of the bullet will decrease
-        if (intersects(skeet))
-        this.durability--;
+        Actor o = getOneIntersectingObject(Obstacle.class);
+        if (o != null) {
+            p.resetShootFlag();
+            getWorld().removeObject(this);
+        }
     }
     
     public void checkRotation() {

@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player1 extends Actor
 {
@@ -52,6 +53,75 @@ public class Player1 extends Actor
         this.width = this.actualSprite.getWidth() + 16;
         this.height = this.actualSprite.getHeight() + 16;
     }
+    
+    public boolean checkTileObstacleCollision()
+    {
+        Actor o = null;
+        //getOneObjectAtOffset(int dx, int dy, Class<?> cls)
+        if(Greenfoot.isKeyDown("a")&&Greenfoot.isKeyDown("w"))
+            o = getOneObjectAtOffset(-16,-16,Obstacle.class);
+        else if(Greenfoot.isKeyDown("d")&&Greenfoot.isKeyDown("w"))
+            o = getOneObjectAtOffset(16,-16,Obstacle.class);
+        else if(Greenfoot.isKeyDown("a")&&Greenfoot.isKeyDown("s"))
+            o = getOneObjectAtOffset(-16,16,Obstacle.class);
+        else if(Greenfoot.isKeyDown("d")&&Greenfoot.isKeyDown("s"))
+            o = getOneObjectAtOffset(16,16,Obstacle.class);
+        else if(Greenfoot.isKeyDown("a"))
+            o = getOneObjectAtOffset(-16,0,Obstacle.class);
+        else if(Greenfoot.isKeyDown("d"))
+            o = getOneObjectAtOffset(16,0,Obstacle.class);
+        else if(Greenfoot.isKeyDown("s"))
+            o = getOneObjectAtOffset(0,16, Obstacle.class);
+        else if(Greenfoot.isKeyDown("w"))
+            o = getOneObjectAtOffset(0,-16, Obstacle.class);
+            
+        if(o!=null)
+            return true;
+        else
+            return false;
+    }
+    
+    public void setDir0(Obstacle obj)
+    {
+        int objPosX = obj.getX();
+        int objPosY = obj.getY();
+        int posX = getX();
+        int posY = getY();
+        int minX = objPosX - 32;
+        int maxX = objPosX + 32;
+        int minY = objPosY - 32;
+        int maxY = objPosY + 32;
+
+        if(posX + 64 >= minX&&posX + 64 <= maxX) //Will collide to right
+            this.directionX=0;
+        else if(posX - 64 <= maxX&&posX - 64 >= minX) //Will collide to left
+            this.directionX=0;   
+        else if(posY - 64 <= maxY&&posY - 64 >= minY) //Will collide to up
+            this.directionY=0;
+        else if(posY + 64 >= minY&&posY + 64 <= maxY) //Will collide to down
+            this.directionY=0;
+    }
+    
+    public boolean willCollide(Obstacle obj) {
+        int objPosX = obj.getX();
+        int objPosY = obj.getY();
+        int posX = getX();
+        int posY = getY();
+        
+        // Calculate the range of x and y positions for collision
+        int minX = objPosX - 32;
+        int maxX = objPosX + 32;
+        int minY = objPosY - 32;
+        int maxY = objPosY + 32;
+    
+        // Check if the Player's position falls within the collision range
+        boolean collideX = posX + 64 >= minX && posX - 64 <= maxX;
+        boolean collideY = posY + 64 >= minY && posY - 64 <= maxY;
+        
+        // Return true if there's a collision along both X and Y axes
+        return collideX && collideY;
+    }
+    
     
     public int getRot()
     {
@@ -120,14 +190,14 @@ public class Player1 extends Actor
     {
         //TopDown Movement
         //Check Horizontal Movement
-        if(Greenfoot.isKeyDown("a"))
+        if(Greenfoot.isKeyDown("a")&&!checkTileObstacleCollision())
         {
              this.directionX = -1;
              this.shootDirX = -1; //Player is pointig left
              this.rotation=180;
              //System.out.println("left");
         }
-        else if(Greenfoot.isKeyDown("d"))
+        else if(Greenfoot.isKeyDown("d")&&!checkTileObstacleCollision())
         {
             this.directionX = 1;
             this.shootDirX = 1; //Player is pointing right
@@ -140,14 +210,14 @@ public class Player1 extends Actor
         }
         
         //Check Vertical Movement
-        if(Greenfoot.isKeyDown("w"))
+        if(Greenfoot.isKeyDown("w")&&!checkTileObstacleCollision())
         {
              this.directionY = -1;
              this.shootDirY = -1; //Player is pointing up
              this.rotation=270;
              //System.out.println("up");
         }
-        else if(Greenfoot.isKeyDown("s"))
+        else if(Greenfoot.isKeyDown("s")&&!checkTileObstacleCollision())
         {
             this.directionY = 1;
             this.shootDirY = 1; //Player is pointing down
